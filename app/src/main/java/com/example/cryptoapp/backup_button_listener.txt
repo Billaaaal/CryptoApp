@@ -1,0 +1,75 @@
+button.setOnClickListener {
+            //Toast.makeText(this@MainActivity, "You clicked me.", Toast.LENGTH_SHORT).show()
+            when (currency) {
+                "eur" -> currency = "usd"
+                "usd" ->  currency = "btc"
+                "btc" ->  currency = "eur"
+
+            }
+
+            button.text = currency
+
+            Timer().schedule(object : TimerTask() {
+                override fun run() {
+                    var returned = getRequest(number_of_elements, currency)
+
+                    data?.clear()
+
+                    for (crypto in returned){
+
+                        var crypto = crypto.asList()
+
+                        var coin_name = crypto[0].toString()
+                        var coin_symbol = crypto[1].toString()
+                        var coin_rank = crypto[2].toString()
+                        var coin_price = crypto[3].toString()
+                        var coin_change_percentage = crypto[4].toString()
+                        var change_status = crypto[5].toString()
+                        var coin_image = crypto[6].toString()
+                        var coin_chart_ = crypto[7].asList()
+                        var coin_chart = coin_chart_.map { it.toFloat() }.toList()//toTypedArray()
+
+                        //Toast.makeText(this@MainActivity, crypto[0].toString(), Toast.LENGTH_SHORT).show()
+
+                        //var coin_name = "Name"
+                        //var coin_symbol ="Symbol"
+                        //var coin_rank = "R"
+                        //var coin_price = "Price"
+                        //var coin_change_percentage = "Perc."
+                        //var coin_image = " "
+
+
+
+                        //Toast.makeText(this@MainActivity, crypto[0].toString(), Toast.LENGTH_SHORT).show()
+
+
+                        //Toast.makeText(this@MainActivity, coin_name, Toast.LENGTH_SHORT).show()
+
+
+
+                        data.add(ItemsViewModel(R.drawable.ic_baseline_folder_24, coin_name, coin_symbol, coin_rank, coin_price, coin_change_percentage,change_status, coin_image, coin_chart, this@MainActivity))
+                    }
+                    runOnUiThread {
+                        recyclerview.adapter!!.notifyDataSetChanged()
+                        current = getRequest(number_of_elements, currency).toString()
+                    }
+
+                }
+            }, 0)
+
+
+
+
+
+
+
+                //data.add(ItemsViewModel(R.drawable.ic_baseline_folder_24, coin_name, coin_symbol, coin_rank, coin_price, coin_change_percentage,change_status, coin_image))
+
+
+
+
+
+
+		//remplacer "recyclerview.adapter!!.notifyDataSetChanged()" avec quelque chose qui change les row seulement et pas toute la page
+
+        }
